@@ -24,7 +24,8 @@
             flex-direction: column;
             align-items: center;
             justify-content: space-around;
-            height: 100vh;
+            width: 100vw;
+            height: 200vh;
             background: #fff;
             /* 设置背景颜色为白色 */
             touch-action: manipulation;
@@ -162,6 +163,22 @@
             box-shadow: #00ffff 0 0 10px 10px;
             border-radius: 100vh;
         }
+        .mp4 {
+            transition: all 500ms ease-in-out;
+        }
+        .mp4 video {
+            transition: all 500ms ease-in-out;
+            border-radius: 10%;
+
+        }
+        .mp4 video:hover {
+            transition: all 500ms ease-in-out;
+            transform: scale(1.1);
+            border-radius: 10%;
+            box-shadow: #00ffff 0 0 10px 10px;
+            border: #00ffff 10px solid;
+            cursor: pointer;
+        }
 
         @media screen and (max-width: 750px) {
             body {
@@ -260,7 +277,9 @@
         <button class="dark">Dark</button>
     </div>
     <!-- 演示视频 -->
-     <video src="https://cdn.jsdelivr.net/gh/KaiGuan/KaiGuan.github.io/assets/videos/KIANG.mp4" controls autoplay loop muted></video>
+     <div class="mp4">
+        <video src="./MP4/2026-03-14 07-14-54.mp4" controls="controls" autoplay="autoplay" loop="loop" muted="muted" style="width: 580px; height: 50vh;"></video>
+        </div>
     <div class="upload-section">
         <!-- 上传站立图的按钮，点击时触发隐藏的文件输入 -->
         <button class="upload-btn" onclick="document.getElementById('standImg').click()">上传站立图</button>
