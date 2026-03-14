@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KIANG - 完全自定义角色触摸动画+语音效果</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            /* 清除点击高亮样式 */
+            outline: none;
+            /* 清除聚焦样式 */
+            user-select: none;
+            /* 禁止用户选中文字 */
+        }
+
+        body {
+            transition: all 1500ms ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-around;
+            height: 100vh;
+            background: #fff;
+            /* 设置背景颜色为白色 */
+            touch-action: manipulation;
+            /* 禁止双击放大 */
+        }
+
+        .upload-section {
+            transition: all 500ms ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* 设置上传部分的底部外边距 */
+        }
+
+        .upload-btn {
+            transition: all 1500ms ease-in-out;
+            margin: 5px;
+            padding: 8px 12px;
+            background: #f0f0f0;
+            /* 设置按钮背景颜色 */
+            border: none;
+            /* 设置按钮边框 */
+            border-radius: 100vw;
+            /* 设置按钮圆角 */
+            cursor: pointer;
+            /* 设置鼠标悬停时的光标为指针 */
+        }
+
+        .upload-btn:hover {
+            transition: all 500ms ease-in-out;
+            background: #2e5775;
+            border: 10px solid #00ffff;
+            color: #00eeeed7;
+            font-weight: 700;
+            padding: 60pt;
+            font-size: 50pt;
+            text-shadow: #00ffff 0 0 8px;
+            box-shadow: #00ffff 0 0 30px 4px;
+        }
+
+        .character {
+            position: relative;
+            cursor: pointer;
+            /* 设置鼠标悬停时的光标为指针 */
+        }
+
+        .text {
+            position: absolute;
+            top: -40px;
+            /* 设置文本相对于角色图片的位置 */
+            left: 50%;
+            transform: translateX(-50%);
+            /* 将文本居中显示 */
+            background: #fff;
+            /* 设置文本背景颜色 */
+            padding: 8px 16px;
+            /* 设置文本内边距 */
+            border: 1px solid #ccc;
+            /* 设置文本边框 */
+            border-radius: 4px;
+            /* 设置文本圆角 */
+            display: none;
+            /* 默认隐藏文本 */
+        }
+
+        /* 图片禁止选中、无点击高亮 */
+        #charImg {
+            width: 200px;
+            /* 设置图片宽度 */
+            display: block;
+            /* 设置图片为块级元素 */
+        }
+
+        .btn {
+            transition: all 1500ms ease-in-out;
+            display: flex;
+            justify-content: space-around;
+            flex-direction: column;
+            width: 100vw;
+            height: 20vh;
+        }
+
+        .btn button {
+            transition: all 1500ms ease-in-out;
+            border-radius: 100vh;
+            border: none;
+            width: 100pt;
+            height: 50pt;
+            cursor: pointer;
+        }
+
+        .Light {
+            transition: all 500ms ease-in-out;
+            border-radius: 100vh;
+            border: none;
+            width: 100pt;
+            height: 50pt;
+        }
+
+        .Light:hover {
+            transition: all 500ms ease-in-out;
+            background-color: #fff;
+            color: #000;
+            font-weight: 700;
+            border: #000 3px solid;
+        }
+
+        .dark {
+            transition: all 500ms ease-in-out;
+            border-radius: 100vh;
+            border: none;
+            width: 100pt;
+            height: 50pt;
+        }
+
+        .dark:hover {
+            transition: all 500ms ease-in-out;
+            background-color: #2e5775;
+            color: #00ffff;
+            font-weight: 700;
+            border: #00ffff 3px solid;
+        }
+
+        h1 {
+            transition: all 1500ms ease-in-out;
+            color: #ffffff;
+            text-shadow: #00ffff 0 0 5px;
+        }
+
+        h1:hover {
+            text-shadow: #02fff2 0 0 10px;
+            color: #3aebbf;
+            padding: 25pt;
+            cursor: pointer;
+            box-shadow: #00ffff 0 0 10px 10px;
+            border-radius: 100vh;
+        }
+
+        @media screen and (max-width: 750px) {
+            body {
+                transition: all 500ms ease-in-out;
+                background-color: #2e5775;
+            }
+
+            h1 {
+                transition: all 500ms ease-in-out;
+                font-size: 16pt;
+            }
+
+            .btn {
+                transition: all 1500ms ease-in-out;
+                display: flex;
+                justify-content: space-around;
+                flex-direction: column;
+                width: 100vw;
+                height: 20vh;
+            }
+
+            .btn button {
+                transition: all 1500ms ease-in-out;
+                border-radius: 100vh;
+                border: none;
+                width: 80pt;
+                height: 30pt;
+                cursor: pointer;
+            }
+
+            .Light {
+                transition: all 500ms ease-in-out;
+                border-radius: 100vh;
+                border: none;
+                width: 80pt;
+                height: 30pt;
+            }
+
+            .Light:hover {
+                transition: all 500ms ease-in-out;
+                background-color: #fff;
+                color: #000;
+                font-weight: 700;
+                border: #000 3px solid;
+            }
+
+            .dark {
+                transition: all 500ms ease-in-out;
+                border-radius: 100vh;
+                border: none;
+                width: 100pt;
+                height: 50pt;
+            }
+
+            .dark:hover {
+                transition: all 500ms ease-in-out;
+                background-color: #2e5775;
+                color: #00ffff;
+                font-weight: 700;
+                border: #00ffff 3px solid;
+            }
+
+            .upload-btn {
+                transition: all 1500ms ease-in-out;
+                font-size: 12px;
+                background: #f0f0f0;
+                /* 设置按钮背景颜色 */
+                border: 1px solid #ccc;
+                /* 设置按钮边框 */
+                border-radius: 100vw;
+                /* 设置按钮圆角 */
+                cursor: pointer;
+                /* 设置鼠标悬停时的光标为指针 */
+            }
+
+            .upload-btn:hover {
+                transition: all 500ms ease-in-out;
+                background: #2e5775;
+                border: 10px solid #00ffff;
+                color: #00eeeed7;
+                font-weight: 700;
+                padding: 20pt;
+                font-size: 30pt;
+                text-shadow: #00ffff 0 0 8px;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <h1>KIANG 完全自定义角色触摸动画+语音效果</h1>
+    <!-- 更改界面样式的按钮分别为 Light dark -->
+    <div class="btn">
+        <button class="Light">Light</button>
+        <button class="dark">Dark</button>
+    </div>
+    <!-- 演示视频 -->
+     <video src="https://cdn.jsdelivr.net/gh/KaiGuan/KaiGuan.github.io/assets/videos/KIANG.mp4" controls autoplay loop muted></video>
+    <div class="upload-section">
+        <!-- 上传站立图的按钮，点击时触发隐藏的文件输入 -->
+        <button class="upload-btn" onclick="document.getElementById('standImg').click()">上传站立图</button>
+        <!-- 隐藏的文件输入，用于选择站立图 -->
+        <input type="file" id="standImg" accept="image/*" style="display:none" onchange="loadStand(this)">
+
+        <!-- 上传趴地图的按钮，点击时触发隐藏的文件输入 -->
+        <button class="upload-btn" onclick="document.getElementById('lieImg').click()">上传趴地图</button>
+        <!-- 隐藏的文件输入，用于选择趴地图 -->
+        <input type="file" id="lieImg" accept="image/*" style="display:none" onchange="loadLie(this)">
+
+        <!-- 上传提示音频的按钮，点击时触发隐藏的文件输入 -->
+        <button class="upload-btn" onclick="document.getElementById('voice').click()">上传提示音频</button>
+        <!-- 隐藏的文件输入，用于选择提示音频 -->
+        <input type="file" id="voice" accept="audio/*" style="display:none" onchange="loadAudio(this)">
+
+        <br>
+        <!-- 缩小图片的按钮 -->
+        <button class="upload-btn" onclick="zoom(0.9)">缩小图片</button>
+        <!-- 放大图片的按钮 -->
+        <button class="upload-btn" onclick="zoom(1.1)">放大图片</button>
+    </div>
+
+    <div class="character">
+        <!-- 显示触摸提示的文本 -->
+        <div class="text">您已消耗一次免费触摸机会</div>
+        <!-- 角色图片 -->
+        <img id="charImg" src="" alt="角色图">
+    </div>
+
+    <script>
+        // 获取body元素
+        const body = document.body;
+        // 获取 Light 和 Dark 按钮
+        const lightBtn = document.querySelector('.Light');
+        const darkBtn = document.querySelector('.dark');
+        // 获取角色图片元素
+        const charImg = document.getElementById('charImg');
+        // 获取触摸提示文本元素
+        const textBlock = document.querySelector('.text');
+
+        // 存储站立图的URL
+        let standImage = '';
+        // 存储趴地图的URL
+        let lieImage = '';
+        // 存储提示音频的URL
+        let audioSrc = '';
+        // 标记角色是否正在趴下
+        let isLying = false;
+        // 记录触摸次数
+        let touchCount = 0;
+
+        // 禁止双击放大
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', (e) => {
+            const now = Date.now();
+            // 如果两次触摸事件间隔小于300毫秒，则阻止默认行为（禁止双击放大）
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now; // 更新上次触摸事件的时间
+        }, false);
+
+        // 图片缩放函数
+        function zoom(scale) {
+            // 只有当图片有src时才允许缩放
+            if (charImg.src) {
+                let width = parseInt(charImg.style.width) || 200; // 获取当前图片宽度，默认为200px
+                charImg.style.width = (width * scale) + 'px'; // 根据缩放比例调整图片宽度
+            }
+        }
+
+        // 加载站立图函数
+        function loadStand(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader(); // 创建FileReader对象
+                reader.onload = (e) => {
+                    standImage = e.target.result; // 将读取的图片文件存储到standImage变量中
+                    charImg.src = standImage; // 设置角色图片的src为站立图的URL
+                };
+                reader.readAsDataURL(input.files[0]); // 读取文件并转换为Data URL
+            }
+        }
+
+        // 加载趴地图函数
+        function loadLie(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader(); // 创建FileReader对象
+                reader.onload = (e) => {
+                    lieImage = e.target.result; // 将读取的图片文件存储到lieImage变量中
+                };
+                reader.readAsDataURL(input.files[0]); // 读取文件并转换为Data URL
+            }
+        }
+
+        // 加载提示音频函数
+        function loadAudio(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader(); // 创建FileReader对象
+                reader.onload = (e) => {
+                    audioSrc = e.target.result; // 将读取的音频文件存储到audioSrc变量中
+                };
+                reader.readAsDataURL(input.files[0]); // 读取文件并转换为Data URL
+            }
+        }
+
+        // 播放提示音频函数
+        function playAudio() {
+            if (audioSrc) {
+                const audio = new Audio(audioSrc); // 创建Audio对象
+                audio.play().catch(err => { }); // 播放音频，并捕获可能的错误
+            }
+        }
+
+        // 角色图片点击事件监听
+        charImg.addEventListener('click', () => {
+            playAudio(); // 播放提示音频
+
+            // 如果角色当前不是趴下状态且有趴地图，则切换为趴地图
+            if (!isLying && lieImage) {
+                charImg.src = lieImage; // 设置角色图片的src为趴地图的URL
+                touchCount++; // 增加触摸次数
+                textBlock.textContent = `您已消耗 ${touchCount} 次免费触摸机会`; // 更新文本内容
+                textBlock.style.display = 'block'; // 显示触摸提示文本
+                isLying = true; // 标记角色为趴下状态
+                // 800毫秒后恢复到站立图并隐藏提示文本
+                setTimeout(() => {
+                    charImg.src = standImage; // 设置角色图片的src为站立图的URL
+                    textBlock.style.display = 'none'; // 隐藏触摸提示文本
+                    isLying = false; // 标记角色为站立状态
+                }, 800);
+            }
+        });
+
+        // Light 按钮点击事件监听
+        lightBtn.addEventListener('click', () => {
+            body.style.transition = 'background-color 500ms ease-in-out'; // 添加过渡效果
+            body.style.backgroundColor = '#fff'; // 设置背景颜色为白色
+            body.style.color = '#000'; // 更改文字颜色
+        });
+
+        // Dark 按钮点击事件监听
+        darkBtn.addEventListener('click', () => {
+            body.style.transition = 'background-color 500ms ease-in-out'; // 添加过渡效果
+            body.style.backgroundColor = '#2e5775'; // 设置背景颜色为暗色
+            body.style.color = '#00ffff'; // 更改文字颜色
+        });
+
+        // 为所有的按钮和图片添加触摸事件监听器以减少延迟
+        document.querySelectorAll('.upload-btn, .character img, .btn button').forEach(function(element) {
+            element.addEventListener('touchstart', function(event) {
+                event.preventDefault(); // 阻止默认行为以减少延迟
+            }, { passive: false });
+
+            element.addEventListener('mousedown', function(event) {
+                event.preventDefault(); // 阻止默认行为以减少延迟
+            }, { passive: false });
+        });
+    </script>
+</body>
+
+</html>
